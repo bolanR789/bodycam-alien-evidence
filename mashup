@@ -1,0 +1,368 @@
+# Bodycam: Alien Evidence
+
+A full-campaign mod for **Destroy All Humans! (2020)**: the entire alien-invasion story retold as leaked first-person bodycam footage.
+
+You play the invasion from behind a camera: one human operative with a pistol, a shotgun, and a rifle — no psychokinesis, no jetpack, no hologram, no bodysnatch, no alien weaponry. Everything the alien used to do with powers, you now do with tactics and gunfire.
+
+## Features
+
+- First-person bodycam view across the full campaign
+- Three realistic weapons replace the entire alien arsenal
+- All alien powers removed; every mission re-tuned around gunplay
+- Found-footage treatment: camcorder filter, timestamp / REC HUD, battery meter, on-mic audio
+- All six invasion locations re-balanced for a human on foot
+
+## Status
+
+**Design phase.** This repository holds the design package: the design document, the JSON data sheets that serve as the single source of truth for the mod's systems, and the build guide. Playable builds will be added as they are produced — building and testing requires a PC copy of Destroy All Humans! (2020).
+
+## Repository layout
+
+| Path | Contents |
+|---|---|
+| `docs/GDD.md` | Full design document |
+| `docs/BUILD_GUIDE.md` | How the mod gets built and tested on a PC |
+| `docs/MELTY_PUBLISHING.md` | Publishing plan for Melty.gg |
+| `data/weapons.json` | Weapon data sheet (source of truth) |
+| `data/filter.json` | Bodycam filter, HUD and audio treatment |
+| `data/missions.json` | Per-location mission re-tune overrides |
+
+## Legal
+
+Free, non-commercial fan project. Not affiliated with or endorsed by THQ Nordic, Black Forest Games, Reiss Games, or any rights holder. Requires an owned copy of the game; the mod ships no original game files.
+# Bodycam: Alien Evidence — Game Design Document
+
+## Concept
+
+The full Destroy All Humans! (2020) campaign, played as a first-person tactical shooter. The player is a lone human operative whose bodycam is the camera. Every alien power is gone; every encounter is resolved with realistic firearms, positioning and patience. The whole experience is framed as recovered footage: grain, timestamp, REC indicator, clipped on-mic audio.
+
+### Design pillars
+
+1. **Every shot counts.** Realistic weapons, real recoil, real reloads. Ammo is finite and scavenged.
+2. **Found footage, not superhero.** The camera is a character: exposure pumping, grain, and a battery you watch drain. No power fantasy — survival fantasy.
+3. **The invasion, human-side.** The same campaign beats, rewritten for someone on the ground: what the alien did with psychokinesis, you do with a shotgun and a plan.
+
+## Player fantasy
+
+You are the one person in the invasion zone holding a camera and a gun, walking through locations you know from the original game — now at eye level, up close, and hostile. The comedy of the original stays in the world (dialogue, radio, posters); the *gameplay* is played straight and gritty.
+
+## Weapons
+
+Three weapons replace the entire alien arsenal. Full numbers live in `data/weapons.json` — this section is design intent.
+
+- **Service pistol (M1911-class).** The always-carried sidearm. High per-shot damage, small magazine, slow semi-auto. The "make it count" weapon when everything else is dry.
+- **Pump shotgun.** The room-clearer and the star of tight interiors. Devastating inside ~8 m, near-useless past ~20 m. Slow, rhythmic pump action that punishes misses.
+- **Semi-auto rifle (M1A-class).** The workhorse: precise, hard-hitting, the answer to armored targets and open fields. Recoil punishes spray.
+
+Ammo is carried in realistic quantities and restocked from ammo caches placed where the original game hid weapon pickups. No upgrades, no attachments, no ADS scopes — iron sights only.
+
+## Powers removal
+
+All alien abilities are removed, not just hidden: psychokinesis, jetpack, hologuise, bodysnatch, Zap-O-Matic, Anal Probe, Disintegrator Ray, Ion Detonator, and the saucer's weapons. Consequences and re-tunes:
+
+- **Object-throw puzzles** (PK) → physical interaction: shoot locks, use hazards, or new lever/button props.
+- **Jetpack traversal** → on-foot routes, opened fences and ladders; vertical shortcuts become defensive positions.
+- **Hologuise / bodysnatch stealth** → human stealth: line-of-sight, cover, darkness. Disguise power fantasy becomes tension.
+- **Saucer sections** → ground-side defenses: hold positions while the ground team handles what the saucer used to level. (Saucer missions become the mod's set-piece holdouts.)
+
+## Bodycam treatment
+
+The found-footage layer is a full post-process + audio + HUD stack. Parameters live in `data/filter.json`.
+
+- **Post-process:** film grain, heavy vignette, chromatic aberration at frame edges, slight barrel distortion, auto-exposure pumping when moving between light levels, desaturated green-yellow grade, crushed blacks, 60 fps cap with motion blur on movement only.
+- **HUD:** corner timestamp (date + running clock), blinking REC dot, battery meter that drains over a mission and flickers below 15%, tape counter, no minimap, no crosshair (iron-sight aiming only).
+- **Audio:** on-mic treatment — gunshots clip and distort, constant low hiss, breathing and footsteps prominent, wind noise outdoors, radio chatter filtered as if through a small speaker.
+
+## Campaign re-tune
+
+Each of the six locations keeps its structure, beats and story, with encounters rebuilt for gunplay (per-mission overrides in `data/missions.json`):
+
+1. **Turnipseed Farm** — the tutorial, now: first contact at night, first gun pickup, first "you are alone out here."
+2. **Rockwell** — small-town streets and the county fair, played as claustrophobic block-to-block fighting.
+3. **Santa Modesta** — suburbia; human stealth replaces hologuise, house-to-house clears replace rampage sections.
+4. **Union City** — urban verticality without a jetpack: interiors, rooftops by ladder, street-level pressure.
+5. **Area 42** — the military location: the rifle's playground, long sightlines, hardened targets.
+6. **Capitol City** — the finale: the mod's hardest fights, everything the player has learned, ammo scarcity at its tightest.
+
+### Enemy rebalance
+
+Humans-with-guns are now the only threat. Soldiers gain realistic behavior (cover, suppression, flanking); civilians flee and call for help, raising alert levels; Majestic agents are the "elite enemy" with better positioning, not more health. Enemy counts drop per encounter; lethality rises. The player is fragile — two or three rifle hits down — with a mission-restart check at the tape's "end."
+
+## Difficulty and pacing
+
+One difficulty, tuned hard. Missions are 10–20 minutes. Checkpointing at objective boundaries, framed as "tape cuts."
+
+## Out of scope
+
+No multiplayer, no new story content, no voice re-recording, no weapons beyond the three, no mod menu options beyond filter intensity.
+{
+  "meta": {
+    "name": "weapons",
+    "version": "1.0.0",
+    "description": "Bodycam: Alien Evidence — weapon data sheet. Single source of truth; mod code is generated from these values.",
+    "note": "Damage units are relative (100 = stock human health). Tune during playtesting; change here first."
+  },
+  "player": {
+    "health": 100,
+    "hits_survived_rifle_range": "2-3",
+    "regeneration": "none",
+    "healing": "bandage pickups at objective boundaries only"
+  },
+  "weapons": {
+    "pistol": {
+      "display_name": "Service Pistol",
+      "archetype": "M1911-class semi-automatic",
+      "role": "sidearm, last resort, precise up close",
+      "damage": { "base": 34, "headshot_multiplier": 2.5, "falloff_start_m": 18, "falloff_end_m": 45, "falloff_min_multiplier": 0.35 },
+      "fire": { "semi_auto": true, "max_rpm": 240, "bloom_per_shot_deg": 0.6, "bloom_decay_deg_s": 4.0 },
+      "magazine": { "capacity": 8, "initial_reserves": 64, "max_reserves": 96 },
+      "reload": { "empty_s": 2.2, "tactical_s": 1.8 },
+      "recoil": { "vertical_deg": 1.8, "horizontal_deg": 0.5, "recovery_s": 0.18 },
+      "spread": { "hipfire_deg": 3.0, "ads_deg": 0.4 },
+      "ads": { "zoom_fov_deg": 50, "time_in_s": 0.22 },
+      "audio": { "report": "sharp indoor crack; clips the mic at close range" }
+    },
+    "shotgun": {
+      "display_name": "Pump Shotgun",
+      "archetype": "870-class pump action",
+      "role": "interior room-clearing, close ambush",
+      "damage": { "pellets": 8, "pellet_base": 14, "headshot_multiplier": 1.5, "falloff_start_m": 8, "falloff_end_m": 20, "falloff_min_multiplier": 0.1 },
+      "fire": { "pump_action": true, "max_rpm": 70, "pump_interrupts_ads": true },
+      "magazine": { "capacity": 6, "tube_loaded": true, "initial_reserves": 36, "max_reserves": 48, "per_shell_reload_s": 0.7 },
+      "recoil": { "vertical_deg": 5.5, "horizontal_deg": 1.2, "recovery_s": 0.35 },
+      "spread": { "hipfire_deg": 6.5, "ads_deg": 4.0 },
+      "ads": { "zoom_fov_deg": 55, "time_in_s": 0.28 },
+      "audio": { "report": "heavy distorted boom; mic clip every shot" }
+    },
+    "rifle": {
+      "display_name": "Service Rifle",
+      "archetype": "M1A-class semi-automatic battle rifle",
+      "role": "workhorse, open-field and hardened targets",
+      "damage": { "base": 58, "headshot_multiplier": 2.2, "falloff_start_m": 60, "falloff_end_m": 120, "falloff_min_multiplier": 0.7 },
+      "fire": { "semi_auto": true, "max_rpm": 300, "bloom_per_shot_deg": 0.9, "bloom_decay_deg_s": 5.0 },
+      "magazine": { "capacity": 20, "initial_reserves": 100, "max_reserves": 140 },
+      "reload": { "empty_s": 3.1, "tactical_s": 2.4 },
+      "recoil": { "vertical_deg": 2.9, "horizontal_deg": 0.8, "recovery_s": 0.24 },
+      "spread": { "hipfire_deg": 4.0, "ads_deg": 0.25 },
+      "ads": { "zoom_fov_deg": 42, "time_in_s": 0.3 },
+      "audio": { "report": "flat authoritative crack; light echo outdoors" }
+    }
+  },
+  "slot_rules": {
+    "carry_all": true,
+    "switch_times_s": { "pistol": 0.5, "shotgun": 0.8, "rifle": 0.7 },
+    "crosshair": "none — iron sights only"
+  },
+  "ammo_pickups": {
+    "sources": "placed where the original game placed weapon/energy pickups; carried by elite enemies at 25% of reserves",
+    "pistol_box": 16, "shotgun_box": 8, "rifle_box": 20
+  },
+  "removed_arsenal": ["zap-o-matic", "anal-probe", "disintegrator-ray", "ion-detonator", "saucer-weapons"]
+}
+{
+  "meta": {
+    "name": "filter",
+    "version": "1.0.0",
+    "description": "Bodycam: Alien Evidence — found-footage post-process, HUD and audio treatment. Single source of truth for the overlay stack."
+  },
+  "post_process": {
+    "film_grain": { "intensity": 0.42, "animated": true, "size": "fine 1080p grain" },
+    "vignette": { "intensity": 0.55, "softness": 0.7 },
+    "chromatic_aberration": { "edge_only": true, "max_offset_px": 3 },
+    "barrel_distortion": { "amount": 0.08, "edges_only": true },
+    "auto_exposure": { "pumping": true, "adapt_rate_s": 0.9, "overshoot": 1.15 },
+    "color_grade": { "saturation": 0.55, "tint": "green-yellow", "black_crush": 0.35, "highlight_rolloff": "soft" },
+    "motion": { "fps_cap": 60, "motion_blur": "movement_only", "camera_shake": "amplified_x1.3" },
+    "scanline": { "enabled": false },
+    "resolution_feel": "slight edge softness, no letterboxing"
+  },
+  "hud": {
+    "timestamp": { "position": "bottom-left", "format": "MM-DD-YYYY HH:MM:SS", "runs_during_mission": true },
+    "rec_indicator": { "position": "top-left", "blink_period_s": 1.0, "label": "REC" },
+    "battery": {
+      "position": "top-right",
+      "drain_minutes_full_to_empty": 12,
+      "low_flicker_below_percent": 15,
+      "empty_behavior": "no gameplay effect; visual only (framing, not a timer mechanic)"
+    },
+    "tape_counter": { "position": "bottom-right", "counts": "mission elapsed" },
+    "removed": ["minimap", "crosshair", "objective_waypoints", "ammo_counter_centered"],
+    "ammo_display": "on_weapon_check_gesture_only",
+    "font": "camera OSD style, white, hard shadow"
+  },
+  "audio": {
+    "on_mic": { "hiss_level": 0.12, "always_on": true },
+    "gunshots": { "clipping": true, "distortion_on_close_shots": true },
+    "player_foley": { "breathing": "audible after sprints and firefights", "footsteps": "prominent" },
+    "wind": { "outdoor_only": true, "intensity": 0.2 },
+    "world_audio": { "radio_chatter": "small-speaker filter", "music": "none — source music from in-world radios only" }
+  },
+  "intensity_settings": { "in_game_options": ["Full", "Reduced (grain/vignette -50%)"], "default": "Full" }
+}
+{
+  "meta": {
+    "name": "missions",
+    "version": "1.0.0",
+    "description": "Bodycam: Alien Evidence — per-location mission re-tune overrides. Single source of truth for campaign changes.",
+    "note": "Mission ids, counts and titles are working references; exact in-game mission names, order and trigger data are confirmed during the recon phase on the build PC, then locked here."
+  },
+  "global_rebalance": {
+    "enemy_counts": "-30% vs original rampage sections",
+    "enemy_lethality": "+60% (rifle hits down the player in 2-3)",
+    "soldier_ai": "cover use, suppression, flanking",
+    "civilians": "flee and alert; raise area alert level",
+    "majestic_agents": "elite positioning and optics, modest health",
+    "checkpoints": "objective boundaries, framed as tape cuts",
+    "mission_length_target_minutes": "10-20"
+  },
+  "locations": [
+    {
+      "id": "turnipseed-farm",
+      "name": "Turnipseed Farm",
+      "theme": "first contact at night — the tutorial becomes survival horror",
+      "missions": [
+        { "id": "turnipseed-01", "working_title": "Crash site", "original_power_dependency": ["jetpack"], "retune": "on-foot approach through the corn at night; the pickup truck searchlight is the first real threat; pistol acquired at the farmhouse" },
+        { "id": "turnipseed-02", "working_title": "The barn", "original_power_dependency": ["pk"], "retune": "no thrown objects: shotgun acquired in the barn; a hay-bale barricade becomes the first interior clear" },
+        { "id": "turnipseed-03", "working_title": "Extraction under fire", "original_power_dependency": ["pk", "saucer"], "retune": "hold the extraction point as a first set-piece: one field, one rifle drop, three waves" }
+      ]
+    },
+    {
+      "id": "rockwell",
+      "name": "Rockwell",
+      "theme": "small-town block-to-block fighting; the county fair at night",
+      "missions": [
+        { "id": "rockwell-01", "working_title": "Main street", "original_power_dependency": ["hologuise"], "retune": "human stealth past the patrol; darkness and cover, not a disguise" },
+        { "id": "rockwell-02", "working_title": "The mayor's house", "original_power_dependency": ["bodysnatch", "pk"], "retune": "burglary on foot: enter through the garden, physical locks and light switches" },
+        { "id": "rockwell-03", "working_title": "Radio station", "original_power_dependency": ["zap-o-matic"], "retune": "interior room-clearing with the shotgun; generator puzzle replaced by a breaker box" },
+        { "id": "rockwell-04", "working_title": "The fair", "original_power_dependency": ["jetpack", "saucer"], "retune": "night assault across the fairgrounds; Ferris wheel as sniper nest against you" }
+      ]
+    },
+    {
+      "id": "santa-modesta",
+      "name": "Santa Modesta",
+      "theme": "suburbia — house-to-house clears, human stealth",
+      "missions": [
+        { "id": "santa-modesta-01", "working_title": "The suburb", "original_power_dependency": ["hologuise"], "retune": "back-garden stealth; neighbors call the police on a timer if seen" },
+        { "id": "santa-modesta-02", "working_title": "Housewives' circle", "original_power_dependency": ["bodysnatch"], "retune": "eavesdropping from cover; follow the conversation by shadowing it through backyards" },
+        { "id": "santa-modesta-03", "working_title": "The drive-in", "original_power_dependency": ["pk", "disintegrator"], "retune": "open-lot firefight using cars as cover; projector light as exposure hazard" },
+        { "id": "santa-modesta-04", "working_title": "Police response", "original_power_dependency": ["jetpack"], "retune": "escape on foot through the storm drain network — the only no-combat mission, pure stealth" }
+      ]
+    },
+    {
+      "id": "union-city",
+      "name": "Union City",
+      "theme": "urban verticality without a jetpack — interiors, rooftops, street pressure",
+      "missions": [
+        { "id": "union-city-01", "working_title": "Downtown", "original_power_dependency": ["jetpack"], "retune": "rooftops reached by ladders and fire escapes; vertical advantage is earned, not flown" },
+        { "id": "union-city-02", "working_title": "The apartment", "original_power_dependency": ["bodysnatch", "pk"], "retune": "close-quarters interior clears, thin walls, noise carries between apartments" },
+        { "id": "union-city-03", "working_title": "The riot", "original_power_dependency": ["saucer"], "retune": "streets in chaos: crossfire between police and the crowd; the player threads it on foot" },
+        { "id": "union-city-04", "working_title": "Rooftop holdout", "original_power_dependency": ["jetpack", "ion-detonator"], "retune": "hold a rooftop while the squad exfiltrates; ammo scarcity at its first real test" }
+      ]
+    },
+    {
+      "id": "area-42",
+      "name": "Area 42",
+      "theme": "the military location — the rifle's playground, long sightlines, hardened targets",
+      "missions": [
+        { "id": "area42-01", "working_title": "The perimeter", "original_power_dependency": ["hologuise"], "retune": "desert infiltration by night: spotlights and patrol patterns to read" },
+        { "id": "area42-02", "working_title": "The hangars", "original_power_dependency": ["pk", "disintegrator"], "retune": "long interior lanes; the rifle acquired here if not before" },
+        { "id": "area42-03", "working_title": "The labs", "original_power_dependency": ["bodysnatch"], "retune": "no disguise: lab coats become alarms — a pure stealth floor, lights-out routes" },
+        { "id": "area42-04", "working_title": "The test range", "original_power_dependency": ["saucer", "jetpack"], "retune": "the mod's biggest set-piece: survive the test range as waves of hardened units push your position" }
+   ]
+    },
+    {
+      "id": "capitol-city",
+      "name": "Capitol City",
+      "theme": "the finale — hardest fights, everything learned, ammo at its tightest",
+      "missions": [
+        { "id": "capitol-01", "working_title": "The capital", "original_power_dependency": ["jetpack"], "retune": "government district at night; the widest open fights, covered routes only" },
+        { "id": "capitol-02", "working_title": "The monument", "original_power_dependency": ["pk", "zap-o-matic"], "retune": "circle-the-monument fight; every side is a firing position" },
+        { "id": "capitol-03", "working_title": "The broadcast", "original_power_dependency": ["hologuise", "bodysnatch"], "retune": "infiltrate the station on foot, clear the control room, hold it during the broadcast" },
+        { "id": "capitol-04", "working_title": "The last stand", "original_power_dependency": ["all powers", "saucer"], "retune": "the final holdout: fixed position, all three weapons, scavenged ammo, until the tape cuts to static" }
+      ]
+    }
+  ],
+  "powers_removed": ["psychokinesis", "jetpack", "hologuise", "bodysnatch", "zap-o-matic", "anal-probe", "disintegrator-ray", "ion-detonator", "saucer"]
+}# Build Guide — Bodycam: Alien Evidence
+
+Everything in this guide runs on a **Windows PC with Destroy All Humans! (2020) installed (Steam)**. The design and data sheets are done; the build itself is a PC job.
+
+## Ground rules
+
+- **Established route only.** Use the game's recognized modding route (community loader, SDK, or script extender). Never patch, replace, or re-sign original game files.
+- **Ship no base game files.** The mod archive contains only new/override content and loads on top of the player's own install.
+- **Account safety.** The game is single-player; no anti-cheat conflict is expected. Confirm on the build PC before the first run (if any anti-cheat is present, stop and reassess).
+- **Data sheets drive code.** `data/*.json` is the source of truth; generated/edited content must match them.
+
+## Phase 1 — Recon (half a day)
+
+1. Install universal-modder — it identifies the engine and the modding surface automatically.
+2. Identify: exact Unreal Engine version, pak layout (`~mods` folder support vs. pak patching), the existence of a community loader, and how configs (`.ini`) load.
+3. Inventory the campaign: mission names, order, and trigger structure — then lock `data/missions.json` ids against the real game.
+4. Check the game's modding scene (Nexus, Discord) for an established loader. If one exists, adopt it; if not, use the standard UE4 `~mods` pak route.
+
+## Phase 2 — Prove the three risks (smallest possible test mods)
+
+Each risk gets its own tiny throwaway pak, before any real work:
+
+1. **First-person camera override.** Force the camera to first person at eye height, hide the player model, weapon viewmodel visible. *Go/no-go for the whole concept.* If impossible: stop and re-scope with the user before continuing.
+2. **One weapon swap.** Replace one alien weapon's stats/behavior with the pistol values from `data/weapons.json`.
+3. **Post-process filter.** Apply the `data/filter.json` grade via a post-process volume; verify grain/vignette/exposure pumping.
+
+Any test that fails gets one alternate approach; if that also fails, escalate to a design decision rather than forcing it.
+
+## Phase 3 — Build order
+
+1. Weapons (all three, from `data/weapons.json`)
+2. Filter + HUD + audio treatment (`data/filter.json`)
+3. Mission re-tunes, location by location in campaign order, updating `data/missions.json` as reality forces adjustments: Turnipseed Farm → Rockwell → Santa Modesta → Union City → Area 42 → Capitol City
+4. Enemy rebalance pass per location
+5. Full-campaign playthrough + tuning
+
+## Phase 4 — Packaging
+
+- Zip containing only mod files, structured per the loader's expectations (e.g., `~mods/BodycamAlienEvidence.pak` or the loader's folder).
+- Root: `README.txt` (install one-liner, requirements), the design `README.md` from this repo.
+- Test a clean install on a PC with the game but no dev tools.
+- Capture screenshots/clips per location for the listing.
+
+## Test checklist (per mission)
+
+- [ ] First-person camera stable in all scripted moments
+- [ ] No power is ever required to progress
+- [ ] Ammo economy holds for the whole mission (no soft-locks)
+- [ ] Filter + HUD present in all lighting conditions
+- [ ] Checkpoint/tape-cut framing correct
+- [ ] No original game files in the package
+# Melty.gg Publishing Plan — Bodycam: Alien Evidence
+
+## What has been verified (via Melty's own tools)
+
+- **Neither game is in Melty's catalog.** Searches for Bodycam and Destroy All Humans! (2020) return only custom slugs (e.g. `custom-destroy-all-humans`), which Melty accepts solely as **inspiration tags** — never as the host game.
+- **Recipes against DAH are rejected.** Two draft install recipes (drop-in mod, standalone loader) both failed validation with: a host game must be an existing catalog game; inspiration tags do not count.
+- **Conclusion:** the mashup **cannot be published on Melty until Destroy All Humans! (2020) is added to Melty's game catalog.** No MCP tool exists to request a catalog addition — it requires contacting the Melty team directly. Until then, this GitHub repository is the project's home.
+
+## Ready-to-go recipe (the day DAH joins the catalog)
+
+Target (expected shape; re-validate once the catalog entry exists):
+
+- **Mode:** installed mod — files land in the game's mod folder (loader-determined, per the recon in `BUILD_GUIDE.md`), launched through the game's normal exe.
+- **Package:** the Phase 4 zip from `BUILD_GUIDE.md` — mod files only, no original game files (Melty's safety checks enforce this).
+- **Games on the listing:** host = `destroy-all-humans` (once cataloged); inspiration tags = Bodycam, Destroy All Humans!.
+
+## Publish flow (in order)
+
+1. `inspect_package` — run Melty's detection/safety checks on the built zip.
+2. `create_mod` — draft listing (title, description, games, this repository as source).
+3. `add_screenshot` / `finish_screenshot` — at least one image (first image becomes the cover).
+4. `start_upload` / `finish_upload` — upload the package.
+5. `submit_release` — with the install recipe; Melty runs its safety checks and one-click standard.
+6. `one_click_check` / fix findings — publish standard: what Melty installs itself, plus everything that would otherwise leave a player with manual steps.
+7. **Creator Test** — open the mashup in the Melty app on the build PC and press Test (publish is blocked until Melty sees it running).
+8. `publish`.
+
+## While blocked
+
+- Build and package per `BUILD_GUIDE.md`; keep the zip one-click-clean.
+- Everything in this repository stays the public source of truth for the design.
+- Account risk: effectively zero — the mod only ever touches a single-player game.
